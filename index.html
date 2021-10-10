@@ -95,6 +95,26 @@
       </div>
     </div>
 
+    <!-- Open Task -->
+    <div class="modal fade"
+      id="showTask"
+      tabindex="-1"
+      aria-labelledby="openTaskLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body task__modal__body"></div>
+          <div class="modal-footer">
+            <button type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
       <div class="container-fluid">
@@ -139,7 +159,8 @@
                 class="form-control"
                 placeholder="Search Task"
                 aria-label="Search Task"
-                aria-describedby="basic-addon2">
+                aria-describedby="basic-addon2"
+                onchange="taskSearch.apply(this, arguments)">
               <span class="input-group-text"
                 id="basic-addon2"><i class="fas fa-search"></i></span>
             </div>
@@ -148,8 +169,8 @@
       </section>
 
       <section>
-        <div class="row task__conatiner">
-          
+        <div class="row task__container">
+
         </div>
       </section>
     </div>
