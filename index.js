@@ -192,7 +192,6 @@ const saveTask = (event) => {
 	);
 
 	globalStore = getAvailableData;
-	console.log(globalStore);
 
 	updateLocalStorage();
 
