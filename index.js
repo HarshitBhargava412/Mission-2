@@ -9,7 +9,7 @@ const newCard = ({
 	taskTitle,
 	taskDescription,
 	taskType,
-}) => `<div class="col-md-6 col-lg-4 mb-4" id=${id} key=${id}>
+}) => `<div class="col-md-6 col-lg-4 mb-4" id=${id}>
   <div class="card shadow-sm">
     <div class="card-header d-flex justify-content-end gap-2">
       <button type="button"
@@ -56,7 +56,7 @@ const openTaskContent = ({
 	return `<div id=${id}>
 		<img src="${imageUrl}"
 			alt="bg image"
-			class="img-fluid mb-3" style="height:350px; width:700px;"/>
+			class="img-fluid mb-3" style="height:350px; width:700px;"/><br>
 		<strong class="text-sm text-muted">Created on ${date.toDateString()}</strong>
 		<h2 class="my-3">${taskTitle}</h2>
 		<p class="lead">${taskDescription}</p>
@@ -80,12 +80,12 @@ const loadInitialTaskCards = () => {
 
 	cards.map((cardObject) => {
 		const createNewCard = newCard(cardObject);
-		taskContainer.insertAdjacentHTML("beforeend", createNewCard)
+		taskContainer.insertAdjacentHTML("beforeend", createNewCard);
 		globalStore.push(cardObject);
 	});
 };
 
-const saveChanges = (event) => {
+const saveChanges = () => {
 	const taskData = {
 		id: `${Date.now()}`,
 		imageUrl: document.getElementById('imageurl').value,
@@ -116,18 +116,19 @@ const deleteCard = (event) => {
 	const targetID = event.target.id;
 	const tagname = event.target.tagName;
 
-	globalStore = globalStore.filter(({
+	const removeCard = globalStore.filter(({
 		id
 	}) => id !== targetID);
+	globalStore = removeCard;
 
 	updateLocalStorage();
 
 	if (tagname === "BUTTON")
-		return taskContainer.removeChild(
+		return event.target.parentNode.parentNode.parentNode.parentNode.removeChild(
 			event.target.parentNode.parentNode.parentNode
 		);
 
-	return taskContainer.removeChild(
+	return event.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
 		event.target.parentNode.parentNode.parentNode.parentNode
 	);
 };
@@ -141,9 +142,9 @@ const taskEdit = (event) => {
 	let parentNode, taskTitle, taskDescription, taskType, saveButton;
 
 	if (tagname === "BUTTON") {
-		parentNode = taskContainer.childNodes[1].childNodes[1];
+		parentNode = event.target.parentNode.parentNode;
 	} else {
-		parentNode = taskContainer.childNodes[1].childNodes[1];
+		parentNode = event.target.parentNode.parentNode.parentNode;
 	}
 
 	taskTitle = parentNode.childNodes[5].childNodes[1];
@@ -179,17 +180,20 @@ const saveTask = (event) => {
 	};
 
 	let getAvailableData = globalStore;
-	getAvailableData = getAvailableData.map((details) => {
-		details.id === targetID ? {
-			id: details.id,
-			taskTitle: updatedData.taskTitle,
-			taskDescription: updatedData.taskDescription,
-			taskType: updatedData.taskType,
-			imageUrl: details.imageUrl,
-		} : details
-	});
+	getAvailableData = getAvailableData.map((details) =>
+		details.id === targetID ?
+			{
+				id: details.id,
+				imageUrl: details.imageUrl,
+				taskTitle: updatedData.taskTitle,
+				taskDescription: updatedData.taskDescription,
+				taskType: updatedData.taskType,
+			} : details
+	);
 
 	globalStore = getAvailableData;
+	console.log(globalStore);
+
 	updateLocalStorage();
 
 	taskTitle.setAttribute("contenteditable", "false");
